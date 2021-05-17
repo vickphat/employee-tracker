@@ -26,11 +26,12 @@ const startMenu = () => {
       "Update Employee",
       "Add Employee?",
       "Add Role?",
-      "Add Department?"
+      "Add Department?",
+      "EXIT"
     ]
   }])
     .then(function (value) {
-      switch (value.choices) {
+      switch (value.choice) {
         // TODO come back and add switch statement
         case "View All Employees?":
           viewAllEmployees();
@@ -42,10 +43,10 @@ const startMenu = () => {
 
 const viewAllEmployees = () => {
 
-  let selection = ("SELECT employee.first_name, employee.last_name, role.title, role.salary, department.name, CONCAT(e.first_name, ' ' ,e.last_name) AS Manager FROM employee INNER JOIN role on role.id = employee.role_id INNER JOIN department on department.id = role.department_id left join employee e on employee.manager_id = e.id;")
-  connection.query(selection, function (err, res) {
-    if (err) throw err
-    console.table(res);
+  let view = "SELECT * FROM employee";
+  connection.query(view, function(err, res) {
+    if (err) throw err;
+    console.table("All Employees:", res);
     startMenu();
   })
 }
