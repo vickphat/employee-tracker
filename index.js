@@ -18,7 +18,7 @@ connection.connect((err) => {
   startMenu();
 });
 
-// Command-line prompts
+// Command-line prompts, Main Menu
 const startMenu = () => {
 
   inquirer.prompt([{
