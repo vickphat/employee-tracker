@@ -73,6 +73,7 @@ This project is intended to be used to keep track of employees by various ways. 
 
 ## Demo:
 The following link is a video that will showcase how to run the application.
+<img src = https://github.com/vickphat/employee-tracker/blob/master/images/employeeTracker.JPG>
 
 * https://www.youtube.com/watch?v=3UkXT0a_N9o
 
