@@ -139,6 +139,41 @@ const updateEmployee = () => {
   });
 }
 
+// Function to add a new employee
+const addEmployee = () => {
+  inquirer.prompt([
+    {
+        type: "input",
+        message: "Employee first name:",
+        name: "firstName"
+    },
+    {
+        type: "input",
+        message: "Employee last name:",
+        name: "lastName"
+    },
+    {
+        type: "input",
+        message: "Employee role ID number:",
+        name: "roleID"
+    },
+    {
+        type: "input",
+        message: "Manager ID number:",
+        name: "managerID" || "null"
+    }
+])
+
+    // Insert user input into employee table
+    .then((answer) => {
+        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.firstName, answer.lastName, answer.roleID, answer.managerID], (err, res) => {
+            if (err) throw err;
+            console.table(res);
+            startMenu();
+        });
+    });
+}
+
 
 
 
