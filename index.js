@@ -13,6 +13,7 @@ const connection = mysql.createConnection({
 
 });
 
+// Command-line prompts
 const startMenu = () => {
 
   inquirer.prompt([{
@@ -20,36 +21,58 @@ const startMenu = () => {
     name: "choice",
     message: "How would you like to proceed?",
     choices: [
-      "View All Employees?",
-      "View All Employee's By Roles?",
+      "View All Employees",
+      "View All Employee's By Roles",
       "View all Emplyees By Deparments",
       "Update Employee",
-      "Add Employee?",
-      "Add Role?",
-      "Add Department?",
+      "Add Employee",
+      "Add Role",
+      "Add Department",
       "EXIT"
     ]
   }])
-    .then(function (value) {
-      switch (value.choice) {
-        // TODO come back and add switch statement
-        case "View All Employees?":
+    .then((data) => {
+      switch (data.choice) {
+        // Switch statement to cycle through users choices in command-line
+        case "View All Employees":
           viewAllEmployees();
           break;
-          
+        case "View All Employee's By Roles":
+          viewRoles();
+          break;
+        case "View all Emplyees By Deparments":
+          viewDepartments();
+          break;
+        case "Update Employee":
+          updateEmployee();
+          break;
+        case "Add Employee":
+          addEmployee();
+          break;
+        case "Add Role":
+          addRole();
+          break;
+        case "Add Department":
+          addDepartment();
+          break;
+        case "EXIT":
+          exit();
+          break;
+        default:
+          break;
       }
-    })
-}
+    });
+};
 
 const viewAllEmployees = () => {
 
-  let view = "SELECT * FROM employee";
-  connection.query(view, function(err, res) {
+  let data = "SELECT * FROM employee";
+  connection.query(data, (err, res) => {
     if (err) throw err;
     console.table("All Employees:", res);
     startMenu();
-  })
-}
+  });
+};
 
 
 
@@ -60,6 +83,6 @@ const viewAllEmployees = () => {
 // Connect to the mysql server and sql database
 connection.connect((err) => {
   if (err) throw err;
-  // Run the startMenu function after the connection is made to prompt the user
+  // Run the startMenu function after the connection is made to prompt the user with choices
   startMenu();
 });
