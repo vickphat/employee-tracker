@@ -12,7 +12,6 @@ const connection = mysql.createConnection({
   database: 'employees_DB',
 });
 
-// Connect to the mysql server and sql database
 connection.connect((err) => {
   if (err) throw err;
   // Run the startMenu function after the connection is made to prompt the user with choices
@@ -34,7 +33,6 @@ const startMenu = () => {
       "Add Employee",
       "Add Role",
       "Add Department",
-      "EXIT"
     ]
   }])
     .then((data) => {
@@ -43,27 +41,31 @@ const startMenu = () => {
         case "View All Employees":
           viewAllEmployees();
           break;
+
         case "View All Employees By Roles":
           viewRoles();
           break;
+
         case "View all Employees By Departments":
           viewDepartments();
           break;
+
         case "Update Employee":
           updateEmployee();
           break;
+
         case "Add Employee":
           addEmployee();
           break;
+
         case "Add Role":
           addRole();
           break;
+
         case "Add Department":
           addDepartment();
           break;
-        case "EXIT":
-          exit();
-          break;
+
         default:
           break;
       }
@@ -108,6 +110,7 @@ const viewDepartments = () => {
 
 // Function to update employee role
 const updateEmployee = () => {
+
   inquirer.prompt([
     {
       name: "id",
@@ -115,71 +118,111 @@ const updateEmployee = () => {
       message: "Please enter employee's ID number",
     }
   ])
-  .then((answer) => {
-
-    const ID = answer.id
-    inquirer.prompt([
-      {
-        name: "roleId",
-        type: "input",
-        message: "Please enter the role id",
-      }
-    ])
     .then((answer) => {
 
-      const employeeRoleID = answer.roleId
-      let data = "UPDATE employee SET role_id=? WHERE id=?"
+      const ID = answer.id
+      inquirer.prompt([
+        {
+          name: "roleId",
+          type: "input",
+          message: "Please enter the role id",
+        }
+      ])
+        .then((answer) => {
 
-      connection.query(data, [employeeRoleID, ID], (err,res) => {
-        if(err) throw err;
-        console.table(res);
-        startMenu();
-      });
-    });
-  });
-}
+          const employeeRoleID = answer.roleId
+          let data = "UPDATE employee SET role_id=? WHERE id=?"
 
-// Function to add a new employee
-const addEmployee = () => {
-  inquirer.prompt([
-    {
-        type: "input",
-        message: "Employee first name:",
-        name: "firstName"
-    },
-    {
-        type: "input",
-        message: "Employee last name:",
-        name: "lastName"
-    },
-    {
-        type: "input",
-        message: "Employee role ID number:",
-        name: "roleID"
-    },
-    {
-        type: "input",
-        message: "Manager ID number:",
-        name: "managerID" || "null"
-    }
-])
-
-    // Insert user input into employee table
-    .then((answer) => {
-        connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.firstName, answer.lastName, answer.roleID, answer.managerID], (err, res) => {
+          connection.query(data, [employeeRoleID, ID], (err, res) => {
             if (err) throw err;
             console.table(res);
             startMenu();
+          });
         });
     });
 }
 
+// Function to add a new employee
+const addEmployee = () => {
 
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the new employee's first name?",
+      name: "firstName"
+    },
+    {
+      type: "input",
+      message: "What is the new employee's last name?",
+      name: "lastName"
+    },
+    {
+      type: "input",
+      message: "What is the new employee's role ID number?",
+      name: "roleID"
+    },
+    {
+      type: "input",
+      message: "What is the new employee's manager ID number?",
+      name: "managerID"
+    }
+  ])
+    .then((answer) => {
 
+      connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.firstName, answer.lastName, answer.roleID, answer.managerID], (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+      });
+    });
+}
 
+// Function to add a new role
+const addRole = () => {
 
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the role's name?",
+      name: "roleName"
+    },
+    {
+      type: "input",
+      message: "What is the annual salary:",
+      name: "annualSalary"
+    },
+    {
+      type: "input",
+      message: "What is the department ID:",
+      name: "departmentID"
+    }
+  ])
+    .then((answer) => {
+      connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.roleName, answer.annualSalary, answer.departmentID], (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+      });
+    });
+}
 
+// Function to add a new department
+const addDepartment = () => {
 
-
+  inquirer.prompt([
+    {
+      type: "input",
+      message: "What is the department's name?",
+      name: "departmentName"
+    }
+  ])
+    .then((answer) => {
+      connection.query("INSERT INTO department (name) VALUES (?)", [answer.departmentName], (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        startMenu();
+      })
+    })
+}
 
 
